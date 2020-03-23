@@ -1,3 +1,3 @@
 # SwiftUIGeometryPractice
 Build Watch face,  Circle Text using SwiftUI
-![Image Watch](https://imgur.com/NpyDvO6)
+![Image Watch](https://i.imgur.com/NpyDvO6.png)
