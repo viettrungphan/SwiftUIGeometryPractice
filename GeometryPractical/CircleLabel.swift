@@ -17,9 +17,9 @@ struct CircleText_Preview: PreviewProvider {
 //MARK: - CircleLabel
 
 struct CircleText: View {
-    var data = Data()
     var radius: Double
     var text: String
+    var kerning: CGFloat = 5.0
     
     private var texts: [(offset: Int, element:Character)] {
         return Array(text.enumerated())
@@ -27,23 +27,23 @@ struct CircleText: View {
     
     @State var textSizes: [Int:Double] = [:]
     
-    
-    
     var body: some View {
         ZStack {
             ForEach(self.texts, id: \.self.offset) { (offset, element) in
                 VStack {
                     Text(String(element))
+                        .kerning(self.kerning)
                         .background(Sizeable())
                         .onPreferenceChange(WidthPreferenceKey.self, perform: { size in
-                            self.textSizes[offset] = Double(size + 3)
+                            self.textSizes[offset] = Double(size)
                         })
                     Spacer()
                 }
                 .rotationEffect(self.angle(at: offset))
                 
             }
-        }
+        }.rotationEffect(-self.angle(at: self.texts.count-1)/2)
+            
         .frame(width: 300, height: 300, alignment: .center)
     }
     
@@ -82,8 +82,7 @@ struct WidthPreferenceKey: PreferenceKey {
 struct Sizeable: View {
     var body: some View {
         GeometryReader { geometry in
-            return Rectangle()
-                .foregroundColor(.clear)
+            Color.clear
                 .preference(key: WidthPreferenceKey.self, value: geometry.size.width)
         }
     }

@@ -15,7 +15,7 @@ struct ContentView: View {
                 .frame(width: 200, height: 200, alignment: .center)
 
             Text("Dwarves Foundation Looking for iOS, Golang, FE candidate.")
-            CircleText(radius: 100, text: "Dwarves Foundation Looking for iOS, Golang, FE candidate.")
+            CircleText(radius: 100, text: "Dwarves Foundation Looking for iOS, Golang, FE candidate.", kerning: 2)
 
 //            VStack {
 //                PolygonView(sides: 3)
