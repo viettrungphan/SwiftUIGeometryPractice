@@ -12,8 +12,13 @@ import SwiftUI
 
 //MARK: - Watch
 
+struct Watch_Preview: PreviewProvider {
+    static var previews: Watch {
+        Watch()
+    }
+}
+
 struct Watch: View {
-    var color: Color = Color.black
     @State var date:Date = Date()
     
     var body: some View {
@@ -44,33 +49,26 @@ struct Watch: View {
         
         return ZStack{
             //            Circle().fill(Color.green)
-            Arc(startAngle: .radians(0), endAngle: .radians(Double.pi*2))
+            Arc()
                 .stroke(lineWidth: 3)
-                .foregroundColor(self.color)
 
-            Ticks(color: self.color)
-            Numbers(color: self.color)
-            
+            Ticks()
+            Numbers()
             Circle()
                 .fill()
-                .foregroundColor(self.color)
-
                 .frame(width: 15, height: 15, alignment: .center)
-//
-//            //Hour hand
+            //Hour hand
             Hand(offSet: 40)
                 .fill()
-                .foregroundColor(self.color)
                 .frame(width: 4, alignment: .center)
                 .rotationEffect(.radians(hourAngle))
-//
+
             //Minute hand
             Hand(offSet: 10)
                 .fill()
-                .foregroundColor(self.color)
-
                 .frame(width: 3, alignment: .center)
                 .rotationEffect(.radians(minuteAngle))
+            
             //Second hand
             Hand(offSet: 5)
                 .fill()
@@ -83,7 +81,7 @@ struct Watch: View {
                 .foregroundColor(.red)
                 .frame(width: 7, height: 7, alignment: .center)
         }
-        .foregroundColor(Color(UIColor.label))
+        .frame(width: 200, height: 200, alignment: .center)
         .onAppear(perform: start)
     }
     
@@ -99,25 +97,20 @@ struct Watch: View {
     }
 }
 
-struct Arc: Shape, InsettableShape {
-    
-    var insetAmount: CGFloat = 0
-    
-    func inset(by amount: CGFloat) -> some InsettableShape {
-        var arc = self
-        arc.insetAmount += amount
-        return self
-    }
-    
-    var startAngle: Angle = .degrees(0)
-    var endAngle: Angle = .degrees(360)
+struct Arc: Shape {
+
+    var startAngle: Angle = .radians(0)
+    var endAngle: Angle = .radians(Double.pi * 2)
     var clockWise: Bool = true
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        path.addArc(center:  CGPoint(x: rect.midX, y: rect.midY), radius: rect.width/2 - insetAmount, startAngle: startAngle, endAngle: endAngle, clockwise: clockWise)
+        
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = min(rect.width/2, rect.height/2)
+        
+        path.addArc(center:  center, radius: radius , startAngle: startAngle, endAngle: endAngle, clockwise: clockWise)
         return path
     }
-    
 }
 
 struct Circle:  Shape {
@@ -138,13 +131,11 @@ struct Hand: Shape {
 }
 
 struct Ticks: View {
-    var color: Color
     var body: some View {
         ZStack {
             ForEach(0..<60) { position in
-                Tick(isLong: position % 5 == 0)
+                Tick(isLong: position % 5 == 0 )
                     .stroke(lineWidth: 2)
-                    .foregroundColor(self.color)
                     .rotationEffect(.radians(Double.pi*2 / 60 * Double(position)))
                 
             }
@@ -163,14 +154,13 @@ struct Tick: Shape {
 }
 
 struct Numbers: View {
-    var color: Color
     var body: some View {
         ZStack{
             ForEach(1..<13) { hour in
                 Number(hour: hour)
             }
             
-        }.foregroundColor(self.color)
+        }
     }
 }
 
